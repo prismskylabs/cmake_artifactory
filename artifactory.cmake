@@ -76,9 +76,9 @@ function(download_artifact repoUrl platform projectName version dstPath)
     endif()
 endfunction()
 
-function(upload_artifact_post_build srcPath repoUrl platform projectName) 
+function(make_upload_artifact_target target_name srcPath repoUrl platform projectName) 
     message(STATUS "Setting up artifact upload")
-    add_custom_target(upload_delivery
+    add_custom_target(${target_name}
     COMMAND python -c \"import cmake_artifactory.cli as cli\;cli.put_artifact('${srcPath}', '${repoUrl}', '${projectName}', '${platform}')\"
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     DEPENDS delivery
