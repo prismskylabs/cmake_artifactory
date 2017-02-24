@@ -39,7 +39,7 @@ function(download_artifact repoUrl platform projectName version dstPath)
     #check that artifact available on server
     message(STATUS "Trying to locate artifact ${repoUrl}, ${projectName}, ${platform}, ${version}")
     execute_process(
-       COMMAND python -c "import prism_artifactory.cli as cli;cli.find_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}')"
+       COMMAND python -c "import cmake_artifactory.cli as cli;cli.find_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}')"
        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
        OUTPUT_VARIABLE ARTIFACT_SERVER_PATH
        ERROR_VARIABLE ERR
@@ -55,7 +55,7 @@ function(download_artifact repoUrl platform projectName version dstPath)
     file(MAKE_DIRECTORY ${dstPath})
     message(STATUS "Trying to download artifact ${repoUrl}, ${projectName}, ${platform}, ${version}, ${dstPath}")
     execute_process(
-       COMMAND python -c "import prism_artifactory.cli as cli; cli.get_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}','${dstPath}/artifact.tar.gz')"
+       COMMAND python -c "import cmake_artifactory.cli as cli; cli.get_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}','${dstPath}/artifact.tar.gz')"
        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
        RESULT_VARIABLE I_RESULT
        ERROR_VARIABLE ERR
@@ -79,7 +79,7 @@ endfunction()
 function(upload_artifact_post_build srcPath repoUrl platform projectName) 
     message(STATUS "Setting up artifact upload")
     add_custom_target(upload_delivery
-    COMMAND python -c \"import prism_artifactory.cli as cli\;cli.put_artifact('${srcPath}', '${repoUrl}', '${projectName}', '${platform}')\"
+    COMMAND python -c \"import cmake_artifactory.cli as cli\;cli.put_artifact('${srcPath}', '${repoUrl}', '${projectName}', '${platform}')\"
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     DEPENDS delivery
 )
