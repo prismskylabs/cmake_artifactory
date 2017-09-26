@@ -3,13 +3,13 @@ from artifactory import ArtifactoryPath
 
 def findArtifact(repo,project,platform,version):
     artifactPath = repo+"/"+project+"/"+platform+"/"
-    path = ArtifactoryPath(artifactPath)  
+    path = ArtifactoryPath(str(artifactPath))  
     foundItems = list(filter(lambda p: fnmatch.fnmatch(str(p),'*/{}_{}*.tar.gz'.format(project,version)), path))
     return foundItems
 
 def getArtifact(repo,project,platform,version,localPath):
     artifactPath = repo+"/"+project+"/"+platform+"/"
-    path = ArtifactoryPath(artifactPath)  
+    path = ArtifactoryPath(str(artifactPath))  
     foundItems = list(filter(lambda p: fnmatch.fnmatch(str(p),'*/{}_{}*.tar.gz'.format(project,version)), path))
     if len(foundItems)==0:
         raise Exception('No matching artifacts found')
@@ -21,7 +21,7 @@ def getArtifact(repo,project,platform,version,localPath):
             
 def putArtifact(localPath,repo,project,platform):
     artifactPath = repo+"/"+project+"/"+platform+"/"
-    path = ArtifactoryPath(artifactPath)
+    path = ArtifactoryPath(str(artifactPath))
     if not path.exists():
         path.mkdir()
     path.deploy_file(localPath)
