@@ -29,7 +29,6 @@ function(check_artifactory_deps)
 endfunction()
 
 function(download_artifact repoUrl platform projectName version dstPath)
-
     #check if artifact already exists locally
     if(EXISTS ${dstPath}/artifact.tar.gz)
        message(STATUS "Artifact exists, skipping download")
@@ -39,7 +38,7 @@ function(download_artifact repoUrl platform projectName version dstPath)
     #check that artifact available on server
     message(STATUS "Trying to locate artifact ${repoUrl}, ${projectName}, ${platform}, ${version}")
     execute_process(
-       COMMAND python -c "import cmake_artifactory.cli as cli;cli.find_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}')"
+       COMMAND python3 -c "import sys, os; sys.path.append(os.path.abspath('./cmake_artifactory')); import cli; cli.find_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}')"
        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
        OUTPUT_VARIABLE ARTIFACT_SERVER_PATH
        ERROR_VARIABLE ERR
@@ -55,7 +54,7 @@ function(download_artifact repoUrl platform projectName version dstPath)
     file(MAKE_DIRECTORY ${dstPath})
     message(STATUS "Trying to download artifact ${repoUrl}, ${projectName}, ${platform}, ${version}, ${dstPath}")
     execute_process(
-       COMMAND python -c "import cmake_artifactory.cli as cli; cli.get_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}','${dstPath}/artifact.tar.gz')"
+       COMMAND python3 -c "import sys, os; sys.path.append(os.path.abspath('./cmake_artifactory')); import cli; cli.get_artifact('${repoUrl}', '${projectName}', '${platform}', '${version}','${dstPath}/artifact.tar.gz')"
        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
        RESULT_VARIABLE I_RESULT
        ERROR_VARIABLE ERR
@@ -79,7 +78,7 @@ endfunction()
 function(make_upload_artifact_target target_name srcPath repoUrl platform projectName) 
     message(STATUS "Setting up artifact upload")
     add_custom_target(${target_name}
-    COMMAND python -c \"import cmake_artifactory.cli as cli\;cli.put_artifact('${srcPath}', '${repoUrl}', '${projectName}', '${platform}')\"
+    COMMAND python3 -c "import sys, os; sys.path.append(os.path.abspath('./cmake_artifactory')); import cli; cli.put_artifact('${srcPath}', '${repoUrl}', '${projectName}', '${platform}')"
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     DEPENDS delivery
 )
