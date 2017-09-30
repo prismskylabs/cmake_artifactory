@@ -78,7 +78,7 @@ endfunction()
 function(make_upload_artifact_target target_name srcPath repoUrl platform projectName) 
     message(STATUS "Setting up artifact upload")
     add_custom_target(${target_name}
-    COMMAND python3 -c \"import sys, os\; sys.path.append(os.path.abspath('./cmake_artifactory'))\; import cli\; cli.put_artifact('${srcPath}', '${repoUrl}', '${projectName}', '${platform}')\"
+    COMMAND python3 -c \"import sys, os\; sys.path.append(os.path.abspath('./cmake_artifactory')) \; import cli\; cli.put_artifact('${srcPath}', '${repoUrl}', '${projectName}', '${platform}') \"
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     DEPENDS delivery
 )
