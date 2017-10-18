@@ -64,7 +64,7 @@ function(download_artifact repoUrl platform projectName version dstPath)
        return()
     endif()
     execute_process(
-       COMMAND tar -xvvf artifact.tar.gz
+       COMMAND tar -xf artifact.tar.gz
        WORKING_DIRECTORY ${dstPath}
        RESULT_VARIABLE I_RESULT 
        ERROR_VARIABLE ERR
